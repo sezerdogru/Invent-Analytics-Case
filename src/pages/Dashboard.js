@@ -22,8 +22,8 @@ function Dashboard() {
   const [page, setPage] = useState(1)    
 
   useEffect(()=>{  
-    nextPrev(1)
-  })   
+    dispatch(getMovies({search,page,type,year}) )
+  },[])   
 
   const nextPrev = (page)  => {
   	setPage(page) 
