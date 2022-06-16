@@ -1,25 +1,20 @@
-import React from 'react';
-import {connect} from 'react-redux'
-import { bindActionCreators } from 'redux'; 
+import React from 'react'; 
+import {useSelector } from "react-redux"; 
+import * as Constant from '../Constant'
 
-function Detail ({movie}) {
+function Detail () {
+   const movie = useSelector(state => state.changeMovieReducer);
+
   return (
-    <div>
-      <div><strong>Title: </strong><span>{movie.Title}</span></div>
-      <div><strong>Year: </strong><span>{movie.Year}</span></div>
-      <div><strong>Type: </strong><span>{movie.Type}</span></div>
-      <div><strong>imdbID: </strong><span>{movie.imdbID}</span></div>
-      <img src={movie.Poster} />
+    <div className="detail">
+      <div><strong>{`${Constant.TITLE}: `}</strong><span>{movie.Title}</span></div>
+      <div><strong>{`${Constant.YEAR}: `}</strong><span>{movie.Year}</span></div>
+      <div><strong>{`${Constant.TYPE}: `}</strong><span>{movie.Type}</span></div>
+      <div><strong>{`${Constant.IMDBID}: `}</strong><span>{movie.imdbID}</span></div>
+      <img alt="" src={movie.Poster} />
 
 
     </div>
   )
-}
-
-function mapStateToProps(state){
-  return {
-    movie: state.changeMovieReducer 
-  }
 } 
-
-export default connect(mapStateToProps)(Detail);
+export default Detail;

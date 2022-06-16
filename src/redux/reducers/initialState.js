@@ -1,5 +1,13 @@
-export default {
+const initialState =  {
     currentMovie: {},
-    movies: [], 
-    totalResults: 0
+    movies: {error:"",data:[]}, 
+    totalResults: 0,
+    error: "",
+    form:{
+        search : "Pokemon",
+        year:"",
+        type:"movie",
+    }
 }
+
+export default initialState

@@ -1,58 +1,50 @@
-import React, {useEffect, useState, } from 'react';
+import React, {useEffect, useState  } from 'react';
 import '../styles/App.scss';
-import {Link,useNavigate } from 'react-router-dom'
-import {connect} from 'react-redux'
-import { bindActionCreators } from 'redux';
+import {useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux"; 
 import {getMovies,changeMovie} from '../redux/actions/movieAction' 
+import Search from '../components/Search' 
+import Pagination from '../components/Pagination' 
 
-function Dashboard({
-	movies,
-	getMovies, 
-  totalResults,
-  changeMovie, 
-  currentMovie,
-	...props
-}) {  
+function Dashboard() {  
+  const { totalResults,form, movies } = useSelector(state => ({
+      totalResults: state.totalResultsReducer,
+      movies: state.movieListReducer,
+      form: state.handleChangeReducer, 
+  }));
+
+  const {search,type,year} = form
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate()
-  const [search, setSearch] = useState("Pokemon")
-  const [page, setPage] = useState(1) 
+  
+  const [page, setPage] = useState(1)    
 
-  useEffect(()=>{ 
-    getMovies({search,page}) 
-  },[])  
+  useEffect(()=>{  
+    nextPrev(1)
+  })   
 
   const nextPrev = (page)  => {
   	setPage(page) 
-    getMovies({search,page})
+    dispatch(getMovies({search,page,type,year}) )
   }
 
   function handleNavigate(event,movie) {
     event.preventDefault()
-    changeMovie(movie) 
-  navigate("/detail")
-     
-  }
-
-  const paginationItems = () => { 
-    let pageCount = 1 
-    if(totalResults > 20) pageCount = 3 
-    else if(totalResults > 10) pageCount = 2
-
-    const items = []
-
-    for (let i = 1; i<= pageCount; i++){
-      items.push(
-        <li key={i} className={`page-item ${page === i ? 'active': ''}`}>
-          <span className="page-link" onClick={() => nextPrev(i)}>{i}</span>
-        </li>) 
-    } 
-    return items 
-  }
+    dispatch(changeMovie(movie)) 
+    navigate("/detail") 
+  } 
 
   return (
-    <>  
-      <table className="table">
+    <>   
+      <Search   
+        onSearch={() => dispatch(getMovies({search,year,type,page}))} 
+      /> 
+      <h2>Found: {totalResults}</h2>
+      {movies.data.length === 0 
+            ? <span>{movies.error}</span> 
+            :<table className="table"> 
         <thead className="thead-dark">
           <tr>
             <th scope="col">#</th>
@@ -62,10 +54,10 @@ function Dashboard({
           </tr>
         </thead>
         <tbody>
-          {movies.map((movie, index) => {
+          {movies.data.map((movie, index) => {
             return (
                 <tr key={index}>
-                  <th scope="row">{(page === 1 ? 0 : (page-1) *10) + index +1}</th>
+                  <th>{(page === 1 ? 0 : (page-1) *10) + index +1}</th>
                   <th><span className="name text-dark" onClick={(e) => handleNavigate(e,movie)}>{movie.Title}</span></th>
                   <td>{movie.Year}</td>
                   <td>{movie.imdbID}</td> 
@@ -74,26 +66,14 @@ function Dashboard({
           } )}
         </tbody> 
       </table>
+    }
       <ul className="pagination">
           <li className={`page-item ${page === 1 ? 'disabled': ''}`}><span className="page-link"onClick={() => nextPrev(page-1)}>Previous</span></li>
-          {paginationItems()}
-          <li className="page-item"><span className="page-link" onClick={() => nextPrev(page+1)}>Next</span></li>
+          <Pagination totalResults={totalResults} onClick={nextPrev} page={page} />
+          <li className={`page-item ${movies.data.length === 0 || totalResults - (page * 10) < 1 ? 'disabled': ''}`}><span className="page-link" onClick={() => nextPrev(page+1)}>Next</span></li>
         </ul>
     </>
   );
-}
+}  
 
-
-function mapStateToProps(state){
-	return {
-		movies: state.movieListReducer,
-    totalResults: state.totalResultsReducer,
-    currentMovie: state.changeMovieReducer
-	}
-}
-
-const mapDispatchToProps = {
-	getMovies,changeMovie
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default Dashboard;
