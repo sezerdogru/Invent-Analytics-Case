@@ -1,8 +1,7 @@
 const initialState =  {
     currentMovie: {},
     movies: {error:"",data:[]}, 
-    totalResults: 0,
-    error: "",
+    totalResults: 0, 
     form:{
         search : "Pokemon",
         year:"",
