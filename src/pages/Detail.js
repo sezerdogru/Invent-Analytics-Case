@@ -1,6 +1,6 @@
 import React from 'react'; 
 import {useSelector } from "react-redux"; 
-import * as Constant from '../Constant'
+import * as Constant from 'Constant'
 
 function Detail () {
   const movie = useSelector(state => state.currentMovie);
