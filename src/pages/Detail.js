@@ -3,7 +3,7 @@ import {useSelector } from "react-redux";
 import * as Constant from '../Constant'
 
 function Detail () {
-  const movie = useSelector(state => state.changeMovie);
+  const movie = useSelector(state => state.currentMovie);
 
   return (
     <div className="detail">
