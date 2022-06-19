@@ -1,4 +1,4 @@
-@import "variable"; 
+$bgColor: #f1f2f5;
 
 body {
   margin: 0;
@@ -10,12 +10,11 @@ body {
   background-color: $bgColor;
 }  
 
-li {
+li, .name {
   cursor: pointer;
 }
 
-.name {
-   cursor: pointer;
+.name { 
    &:hover {
     text-decoration: underline;
    }

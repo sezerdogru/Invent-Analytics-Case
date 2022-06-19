@@ -1,5 +1,0 @@
-export const CHANGE_MOVIE = "CHANGE_MOVIE"
-export const GET_MOVIES_SUCCESS = "GET_MOVIES_SUCCESS"  
-export const GET_TOTAL_RESULTS = "GET_TOTAL_RESULTS"
-export const CHANGE_FORM = "CHANGE_FORM"
- 
